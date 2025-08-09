@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhoneHub - Admin Panel</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-orange: #FF6B00;
+            --light-orange: #FF8C42;
+            --light-bg: #F8F9FA;
+        }
+
+        body {
+            background-color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .sidebar {
+            background-color: #fff;
+            border-right: 1px solid #eee;
+            min-height: 100vh;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-link {
+            color: #333;
+            padding: 12px 20px;
+            margin: 5px 0;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background-color: var(--primary-orange);
+            color: white !important;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-orange), var(--light-orange));
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+            border-top: 4px solid var(--primary-orange);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .btn-orange {
+            background-color: var(--primary-orange);
+            border-color: var(--primary-orange);
+            color: white;
+        }
+
+        .btn-orange:hover {
+            background-color: #e55a00;
+            border-color: #e55a00;
+            color: white;
+        }
+
+        .table th {
+            background-color: var(--light-bg);
+        }
+
+        .badge-orange {
+            background-color: var(--light-orange);
+        }
+    </style>
+</head>
+
+<body onload="adminOnloadFunctions();">
+    <!-- Header -->
+    <div class="header">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h2 class="mb-0">PhoneHub Admin Dashboard</h2>
+                </div>
+                <div class="col-md-6 text-end">
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="adminMenu"
+                            data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle me-2"></i>Admin User
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-danger" href="AdminLogout">
+                                    <i class="bi bi-box-arrow-right me-2"></i>Logout
+                                </a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 p-0 sidebar">
+                <div class="d-flex flex-column p-3">
+<ul class="nav nav-tabs flex-column mb-auto mt-3" id="adminTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" href="#dashboard" role="tab" aria-controls="dashboard" aria-selected="true">
+            <i class="bi bi-speedometer2 me-2"></i> Dashboard
+        </a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="products-tab" data-bs-toggle="tab" href="#products" role="tab" aria-controls="products" aria-selected="false">
+            <i class="bi bi-phone me-2"></i> Products
+        </a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false">
+            <i class="bi bi-cart-check me-2"></i> Orders
+        </a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="customers-tab" data-bs-toggle="tab" href="#customers" role="tab" aria-controls="customers" aria-selected="false">
+            <i class="bi bi-people me-2"></i> Customers
+        </a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="reports-tab" data-bs-toggle="tab" href="#reports" role="tab" aria-controls="reports" aria-selected="false">
+            <i class="bi bi-bar-chart me-2"></i> Reports
+        </a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="settings-tab" data-bs-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false">
+            <i class="bi bi-gear me-2"></i> Settings
+        </a>
+    </li>
+</ul>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-10">
+                <div class="tab-content p-4" id="adminTabContent">
+                    <div class="tab-pane fade show active" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
+                    <!-- Stats Overview -->
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <div class="stat-card p-3">
+                                <h5>Total Orders</h5>
+                                    <h2>0</h2>
+                                <span class="text-success">↑ 12% this month</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card p-3">
+                                <h5>Products</h5>
+                                    <h2>0</h2>
+                                    <span class="text-danger">↓ 0% low stock</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card p-3">
+                                <h5>Customers</h5>
+                                    <h2>0</h2>
+                                <span class="text-success">↑ 5% new users</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="stat-card p-3">
+                                <h5>Revenue</h5>
+                                    <h2>$0.00</h2>
+                                <span class="text-success">↑ 18% this month</span>
+                                </div>
+                            </div>
+                        </div>
+                    <!-- Recent Orders -->
+                    <div class="card mb-4">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Recent Orders</h5>
+                            <button class="btn btn-sm btn-orange">View All</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Customer</th>
+                                            <th>Date</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td colspan="6">Loading...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Product Management -->
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Product Management</h5>
+                            <button class="btn btn-sm btn-orange">+ Add Product</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Product</th>
+                                            <th>Brand</th>
+                                            <th>Price</th>
+                                            <th>Stock</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td colspan="7">Loading...</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="products" role="tabpanel" aria-labelledby="products-tab">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h3>Products</h3>
+                            <button class="btn btn-orange" data-bs-toggle="modal" data-bs-target="#addProductModal">+ Add Product</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="admin-product-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Title</th>
+                                        <th>Brand</th>
+                                        <th>Price(Lkr)</th>
+                                        <th>Actions</th>
+                                        </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Product rows will be loaded by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- Add/Edit Product Modal -->
+                        <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="productForm">
+                                            <div class="mb-3">
+                                                <label for="productTitle" class="form-label">Title</label>
+                                                <input type="text" class="form-control" id="productTitle" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="productBrand" class="form-label">Brand</label>
+                                                <input type="text" class="form-control" id="productBrand" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="productPrice" class="form-label">Price</label>
+                                                <input type="number" class="form-control" id="productPrice" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="productStatus" class="form-label">Status</label>
+                                                <select class="form-select" id="productStatus">
+                                                    <option value="active">Active</option>
+                                                    <option value="inactive">Inactive</option>
+                                                </select>
+                                            </div>
+                                            <button type="submit" class="btn btn-orange w-100">Save</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h3>Orders</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="admin-order-table">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                        </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Order rows will be loaded by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- View/Update Order Modal -->
+                        <div class="modal fade" id="viewOrderModal" tabindex="-1" aria-labelledby="viewOrderModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="viewOrderModalLabel">Order Details</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body" id="orderDetailsBody">
+                                        <!-- Order details will be loaded by JS -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="customers" role="tabpanel" aria-labelledby="customers-tab">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h3>Customers</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="admin-customer-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                        </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Customer rows will be loaded by JS -->
+                                    </tbody>
+                                </table>
+                        </div>
+                        <!-- View Customer Modal -->
+                        <div class="modal fade" id="viewCustomerModal" tabindex="-1" aria-labelledby="viewCustomerModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="viewCustomerModalLabel">Customer Details</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body" id="customerDetailsBody">
+                                        <!-- Customer details will be loaded by JS -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="reports" role="tabpanel" aria-labelledby="reports-tab">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h3>Reports</h3>
+                        </div>
+                        <div id="admin-reports-content">
+                            <!-- Reports (charts/tables) will be loaded by JS -->
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h3>Settings</h3>
+                        </div>
+                        <form id="admin-settings-form" class="w-50">
+                            <div class="mb-3">
+                                <label for="adminName" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="adminName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="adminEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="adminEmail" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="adminPassword" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="adminPassword">
+                            </div>
+                            <button type="submit" class="btn btn-orange w-100">Update</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/notification.js"></script>
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+</body>
+
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PhoneHub - Admin Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-orange: #FF6B00;
+            --light-orange: #FF8C42;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ffffff, #fff3e6);
+            height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .login-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            max-width: 450px;
+            margin: auto;
+        }
+        
+        .login-header {
+            background: linear-gradient(135deg, var(--primary-orange), var(--light-orange));
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .login-body {
+            padding: 30px;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 0.25rem rgba(255, 107, 0, 0.25);
+        }
+        
+        .btn-orange {
+            background-color: var(--primary-orange);
+            border-color: var(--primary-orange);
+            color: white;
+            font-weight: 600;
+            padding: 10px;
+        }
+        
+        .btn-orange:hover {
+            background-color: #e55a00;
+            border-color: #e55a00;
+        }
+        
+        .brand-logo {
+            font-weight: 700;
+            font-size: 24px;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container d-flex align-items-center justify-content-center" style="height: 100vh;">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="brand-logo mb-2">PhoneHub</div>
+                <h2>Admin Portal</h2>
+                <p class="mb-0">Access your management dashboard</p>
+            </div>
+            <div class="login-body">
+                <div id="loginMessage" class="alert alert-danger d-none"></div>
+                
+                <div class="mb-3">
+                    <label for="adminEmail" class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="adminEmail" placeholder="admin@phonehub.com">
+                </div>
+                
+                <div class="mb-4">
+                    <label for="adminPassword" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="adminPassword" placeholder="••••••••">
+                </div>
+                
+                <div class="d-grid mb-3">
+                    <button class="btn btn-orange btn-lg" onclick="adminSignIn()">Sign In</button>
+                </div>
+                
+                <div class="text-center">
+                    <a href="#" class="text-decoration-none text-muted">Forgot Password?</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Admin Login JS -->
+    <script>
+        async function adminSignIn() {
+            const email = document.getElementById("adminEmail").value;
+            const password = document.getElementById("adminPassword").value;
+            const messageDiv = document.getElementById("loginMessage");
+            
+            // Clear previous messages
+            messageDiv.classList.add("d-none");
+            messageDiv.innerHTML = "";
+            
+            if (!email || !password) {
+                messageDiv.innerHTML = "Please fill all fields";
+                messageDiv.classList.remove("d-none");
+                return;
+            }
+            
+            const credentials = { email, password };
+            
+            try {
+                const response = await fetch("AdminSignIn", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(credentials)
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.status) {
+                        window.location = "admin.html";
+                    } else {
+                        messageDiv.innerHTML = result.message || "Invalid credentials";
+                        messageDiv.classList.remove("d-none");
+                    }
+                } else {
+                    messageDiv.innerHTML = "Error connecting to server";
+                    messageDiv.classList.remove("d-none");
+                }
+            } catch (error) {
+                console.error("Login error:", error);
+                messageDiv.innerHTML = "Network error occurred";
+                messageDiv.classList.remove("d-none");
+            }
+        }
+        
+        // Enable login on Enter key press
+        document.getElementById("adminPassword").addEventListener("keypress", (e) => {
+            if (e.key === "Enter") adminSignIn();
+        });
+    </script>
+</body>
+</html>
