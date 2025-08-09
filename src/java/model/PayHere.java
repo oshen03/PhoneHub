@@ -10,7 +10,7 @@ import javax.xml.bind.DatatypeConverter;
 
 /**
  *
- * @author Dilhara
+ * @author Oshen Sathsara <oshensathsara2003@gmail.com>
  */
 public class PayHere {
 

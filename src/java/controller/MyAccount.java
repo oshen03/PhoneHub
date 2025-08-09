@@ -28,7 +28,7 @@ import org.hibernate.criterion.Restrictions;
 
 /**
  *
- * @author Dilhara
+ * @author Oshen Sathsara <oshensathsara2003@gmail.com>
  */
 @WebServlet(name = "MyAccount", urlPatterns = {"/MyAccount"})
 public class MyAccount extends HttpServlet {

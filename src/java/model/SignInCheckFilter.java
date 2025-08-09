@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Dilhara
+ * @author Oshen Sathsara <oshensathsara2003@gmail.com>
  */
 @WebFilter(urlPatterns = {"/my-account.html"}) //http://localhost:8080/Smarttrade/my-account.html?id=2
 public class SignInCheckFilter implements Filter {

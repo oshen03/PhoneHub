@@ -27,7 +27,7 @@ import org.hibernate.SessionFactory;
 
 /**
  *
- * @author Dilhara
+ * @author Oshen Sathsara <oshensathsara2003@gmail.com>
  */
 @WebServlet(name = "LoadProdcutData", urlPatterns = {"/LoadProdcutData"})
 public class LoadProdcutData extends HttpServlet {

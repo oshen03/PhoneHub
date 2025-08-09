@@ -38,7 +38,7 @@ import org.hibernate.criterion.Restrictions;
 
 /**
  *
- * @author Dilhara
+ * @author Oshen Sathsara <oshensathsara2003@gmail.com>
  */
 @WebServlet(name = "CheckOut", urlPatterns = {"/CheckOut"})
 public class CheckOut extends HttpServlet {

@@ -25,7 +25,7 @@ import org.hibernate.criterion.Restrictions;
 
 /**
  *
- * @author Dilhara
+ * @author Oshen Sathsara <oshensathsara2003@gmail.com>
  */
 @WebServlet(name = "LoadCartItems", urlPatterns = {"/LoadCartItems"})
 public class LoadCartItems extends HttpServlet {

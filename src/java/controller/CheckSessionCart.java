@@ -22,7 +22,7 @@ import org.hibernate.Transaction;
 
 /**
  *
- * @author Dilhara
+ * @author Oshen Sathsara <oshensathsara2003@gmail.com>
  */
 @WebServlet(name = "CheckSessionCart", urlPatterns = {"/CheckSessionCart"})
 public class CheckSessionCart extends HttpServlet {

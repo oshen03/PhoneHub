@@ -15,7 +15,7 @@ import model.PayHere;
 
 /**
  *
- * @author Dilhara
+ * @author Oshen Sathsara <oshensathsara2003@gmail.com>
  */
 @WebServlet(name = "VerifyPayments", urlPatterns = {"/VerifyPayments"})
 public class VerifyPayments extends HttpServlet {

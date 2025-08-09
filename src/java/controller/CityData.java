@@ -22,7 +22,7 @@ import org.hibernate.SessionFactory;
 
 /**
  *
- * @author Dilhara
+ * @author Oshen Sathsara <oshensathsara2003@gmail.com>
  */
 @WebServlet(name = "CityData", urlPatterns = {"/CityData"})
 public class CityData extends HttpServlet {

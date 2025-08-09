@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Dilhara
+ * @author Oshen Sathsara <oshensathsara2003@gmail.com>
  */
 @WebFilter(urlPatterns = {"/sign-up.html", "/verify-account.html", "/sign-in.html"})
 public class SessionFilter implements Filter {

@@ -14,7 +14,7 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Dilhara
+ * @author Oshen Sathsara <oshensathsara2003@gmail.com>
  */
 @Entity
 @Table(name = "brand")

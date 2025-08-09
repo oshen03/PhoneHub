@@ -18,7 +18,7 @@ import javax.persistence.Temporal;
 
 /**
  *
- * @author Dilhara
+ * @author Oshen Sathsara <oshensathsara2003@gmail.com>
  */
 @Entity
 @Table(name = "product")
