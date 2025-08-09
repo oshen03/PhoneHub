@@ -78,6 +78,31 @@
         .badge-orange {
             background-color: var(--light-orange);
         }
+
+        .entity-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            transition: box-shadow 0.3s;
+        }
+
+        .entity-card:hover {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+
+        .report-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
     </style>
 </head>
 
@@ -116,126 +141,142 @@
             <!-- Sidebar -->
             <div class="col-md-2 p-0 sidebar">
                 <div class="d-flex flex-column p-3">
-<ul class="nav nav-tabs flex-column mb-auto mt-3" id="adminTab" role="tablist">
-    <li class="nav-item" role="presentation">
-        <a class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" href="#dashboard" role="tab" aria-controls="dashboard" aria-selected="true">
-            <i class="bi bi-speedometer2 me-2"></i> Dashboard
-        </a>
-    </li>
-    <li class="nav-item" role="presentation">
-        <a class="nav-link" id="products-tab" data-bs-toggle="tab" href="#products" role="tab" aria-controls="products" aria-selected="false">
-            <i class="bi bi-phone me-2"></i> Products
-        </a>
-    </li>
-    <li class="nav-item" role="presentation">
-        <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false">
-            <i class="bi bi-cart-check me-2"></i> Orders
-        </a>
-    </li>
-    <li class="nav-item" role="presentation">
-        <a class="nav-link" id="customers-tab" data-bs-toggle="tab" href="#customers" role="tab" aria-controls="customers" aria-selected="false">
-            <i class="bi bi-people me-2"></i> Customers
-        </a>
-    </li>
-    <li class="nav-item" role="presentation">
-        <a class="nav-link" id="reports-tab" data-bs-toggle="tab" href="#reports" role="tab" aria-controls="reports" aria-selected="false">
-            <i class="bi bi-bar-chart me-2"></i> Reports
-        </a>
-    </li>
-    <li class="nav-item" role="presentation">
-        <a class="nav-link" id="settings-tab" data-bs-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false">
-            <i class="bi bi-gear me-2"></i> Settings
-        </a>
-    </li>
-</ul>
+                    <ul class="nav nav-tabs flex-column mb-auto mt-3" id="adminTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" href="#dashboard"
+                                role="tab" aria-controls="dashboard" aria-selected="true">
+                                <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="products-tab" data-bs-toggle="tab" href="#products" role="tab"
+                                aria-controls="products" aria-selected="false">
+                                <i class="bi bi-phone me-2"></i> Products
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="orders-tab" data-bs-toggle="tab" href="#orders" role="tab"
+                                aria-controls="orders" aria-selected="false">
+                                <i class="bi bi-cart-check me-2"></i> Orders
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="customers-tab" data-bs-toggle="tab" href="#customers" role="tab"
+                                aria-controls="customers" aria-selected="false">
+                                <i class="bi bi-people me-2"></i> Customers
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="entities-tab" data-bs-toggle="tab" href="#entities" role="tab"
+                                aria-controls="entities" aria-selected="false">
+                                <i class="bi bi-collection me-2"></i> Entities
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="reports-tab" data-bs-toggle="tab" href="#reports" role="tab"
+                                aria-controls="reports" aria-selected="false">
+                                <i class="bi bi-bar-chart me-2"></i> Reports
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a class="nav-link" id="settings-tab" data-bs-toggle="tab" href="#settings" role="tab"
+                                aria-controls="settings" aria-selected="false">
+                                <i class="bi bi-gear me-2"></i> Settings
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
             <!-- Main Content -->
             <div class="col-md-10">
                 <div class="tab-content p-4" id="adminTabContent">
-                    <div class="tab-pane fade show active" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
-                    <!-- Stats Overview -->
-                    <div class="row mb-4">
-                        <div class="col-md-3">
-                            <div class="stat-card p-3">
-                                <h5>Total Orders</h5>
-                                    <h2>0</h2>
-                                <span class="text-success">↑ 12% this month</span>
+                    <!-- Dashboard Tab -->
+                    <div class="tab-pane fade show active" id="dashboard" role="tabpanel"
+                        aria-labelledby="dashboard-tab">
+                        <!-- Stats Overview -->
+                        <div class="row mb-4">
+                            <div class="col-md-3">
+                                <div class="stat-card p-3">
+                                    <h5>Total Orders</h5>
+                                    <h2 id="totalOrders">0</h2>
+
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="stat-card p-3">
-                                <h5>Products</h5>
-                                    <h2>0</h2>
-                                    <span class="text-danger">↓ 0% low stock</span>
+                            <div class="col-md-3">
+                                <div class="stat-card p-3">
+                                    <h5>Products</h5>
+                                    <h2 id="totalProducts">0</h2>
+
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="stat-card p-3">
-                                <h5>Customers</h5>
-                                    <h2>0</h2>
-                                <span class="text-success">↑ 5% new users</span>
+                            <div class="col-md-3">
+                                <div class="stat-card p-3">
+                                    <h5>Customers</h5>
+                                    <h2 id="totalCustomers">0</h2>
+
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="stat-card p-3">
-                                <h5>Revenue</h5>
-                                    <h2>$0.00</h2>
-                                <span class="text-success">↑ 18% this month</span>
+                            <div class="col-md-3">
+                                <div class="stat-card p-3">
+                                    <h5>Revenue</h5>
+                                    <h2 id="totalRevenue">Lkr 0.00</h2>
+
                                 </div>
                             </div>
                         </div>
-                    <!-- Recent Orders -->
-                    <div class="card mb-4">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0">Recent Orders</h5>
-                            <button class="btn btn-sm btn-orange">View All</button>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Order ID</th>
-                                            <th>Customer</th>
-                                            <th>Date</th>
-                                            <th>Amount</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
+
+                        <!-- Recent Orders -->
+                        <div class="card mb-4">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Recent Orders</h5>
+                                <button class="btn btn-sm btn-orange" onclick="switchTab('orders')">View All</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Order ID</th>
+                                                <th>Customer</th>
+                                                <th>Date</th>
+                                                <th>Amount</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="recentOrdersTable">
+                                            <tr>
                                                 <td colspan="6">Loading...</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- Product Management -->
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0">Product Management</h5>
-                            <button class="btn btn-sm btn-orange">+ Add Product</button>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Product</th>
-                                            <th>Brand</th>
-                                            <th>Price</th>
-                                            <th>Stock</th>
-                                            <th>Status</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
+
+                        <!-- Recent Products -->
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Recent Products</h5>
+                                <button class="btn btn-sm btn-orange" onclick="switchTab('products')">View All</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Product</th>
+                                                <th>Brand</th>
+                                                <th>Price</th>
+                                                <th>Stock</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="recentProductsTable">
+                                            <tr>
                                                 <td colspan="7">Loading...</td>
                                             </tr>
                                         </tbody>
@@ -244,10 +285,13 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Products Tab -->
                     <div class="tab-pane fade" id="products" role="tabpanel" aria-labelledby="products-tab">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h3>Products</h3>
-                            <button class="btn btn-orange" data-bs-toggle="modal" data-bs-target="#addProductModal">+ Add Product</button>
+                            <button class="btn btn-orange" data-bs-toggle="modal" data-bs-target="#addProductModal">+
+                                Add Product</button>
                         </div>
                         <div class="table-responsive">
                             <table class="table table-hover" id="admin-product-table">
@@ -256,40 +300,52 @@
                                         <th>ID</th>
                                         <th>Title</th>
                                         <th>Brand</th>
-                                        <th>Price(Lkr)</th>
+                                        <th>Price (LKR)</th>
+                                        <th>Stock</th>
                                         <th>Actions</th>
-                                        </tr>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     <!-- Product rows will be loaded by JS -->
                                 </tbody>
                             </table>
                         </div>
+
                         <!-- Add/Edit Product Modal -->
-                        <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="addProductModal" tabindex="-1"
+                            aria-labelledby="addProductModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <form id="productForm">
                                             <div class="mb-3">
                                                 <label for="productTitle" class="form-label">Title</label>
-                                                <input type="text" class="form-control" id="productTitle" required>
+                                                <input type="text" class="form-control" id="productTitle"
+                                                    name="productTitle" required>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="productBrand" class="form-label">Brand</label>
-                                                <input type="text" class="form-control" id="productBrand" required>
+                                                <input type="text" class="form-control" id="productBrand"
+                                                    name="productBrand" required>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="productPrice" class="form-label">Price</label>
-                                                <input type="number" class="form-control" id="productPrice" required>
+                                                <input type="number" class="form-control" id="productPrice"
+                                                    name="productPrice" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="productQty" class="form-label">Quantity</label>
+                                                <input type="number" class="form-control" id="productQty"
+                                                    name="productQty" required>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="productStatus" class="form-label">Status</label>
-                                                <select class="form-select" id="productStatus">
+                                                <select class="form-select" id="productStatus" name="productStatus">
                                                     <option value="active">Active</option>
                                                     <option value="inactive">Inactive</option>
                                                 </select>
@@ -301,6 +357,8 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Orders Tab -->
                     <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h3>Orders</h3>
@@ -315,20 +373,23 @@
                                         <th>Amount</th>
                                         <th>Status</th>
                                         <th>Actions</th>
-                                        </tr>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     <!-- Order rows will be loaded by JS -->
                                 </tbody>
                             </table>
                         </div>
+
                         <!-- View/Update Order Modal -->
-                        <div class="modal fade" id="viewOrderModal" tabindex="-1" aria-labelledby="viewOrderModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="viewOrderModal" tabindex="-1" aria-labelledby="viewOrderModalLabel"
+                            aria-hidden="true">
                             <div class="modal-dialog modal-lg">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="viewOrderModalLabel">Order Details</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body" id="orderDetailsBody">
                                         <!-- Order details will be loaded by JS -->
@@ -337,6 +398,8 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Customers Tab -->
                     <div class="tab-pane fade" id="customers" role="tabpanel" aria-labelledby="customers-tab">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h3>Customers</h3>
@@ -350,20 +413,23 @@
                                         <th>Email</th>
                                         <th>Status</th>
                                         <th>Actions</th>
-                                        </tr>
+                                    </tr>
                                 </thead>
                                 <tbody>
                                     <!-- Customer rows will be loaded by JS -->
-                                    </tbody>
-                                </table>
+                                </tbody>
+                            </table>
                         </div>
+
                         <!-- View Customer Modal -->
-                        <div class="modal fade" id="viewCustomerModal" tabindex="-1" aria-labelledby="viewCustomerModalLabel" aria-hidden="true">
+                        <div class="modal fade" id="viewCustomerModal" tabindex="-1"
+                            aria-labelledby="viewCustomerModalLabel" aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="viewCustomerModalLabel">Customer Details</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body" id="customerDetailsBody">
                                         <!-- Customer details will be loaded by JS -->
@@ -372,14 +438,163 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="reports" role="tabpanel" aria-labelledby="reports-tab">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h3>Reports</h3>
+
+                    <!-- Entities Tab -->
+                    <div class="tab-pane fade" id="entities" role="tabpanel" aria-labelledby="entities-tab">
+                        <div class="mb-3">
+                            <h3>Entity Management</h3>
+                            <p class="text-muted">Manage brands, colors, models, cities, delivery types, quality, and
+                                storage options.</p>
                         </div>
-                        <div id="admin-reports-content">
-                            <!-- Reports (charts/tables) will be loaded by JS -->
+
+                        <div class="row">
+                            <!-- Brands -->
+                            <div class="col-md-6 col-lg-4 mb-4">
+                                <div class="entity-card p-3">
+                                    <h5 class="mb-3">
+                                        <i class="bi bi-tag me-2"></i>Brands
+                                        <button class="btn btn-sm btn-orange float-end"
+                                            onclick="showEntityModal('brand')">+ Add</button>
+                                    </h5>
+                                    <div id="brandsList" class="entity-list">
+                                        <div class="text-center">Loading...</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Colors -->
+                            <div class="col-md-6 col-lg-4 mb-4">
+                                <div class="entity-card p-3">
+                                    <h5 class="mb-3">
+                                        <i class="bi bi-palette me-2"></i>Colors
+                                        <button class="btn btn-sm btn-orange float-end"
+                                            onclick="showEntityModal('color')">+ Add</button>
+                                    </h5>
+                                    <div id="colorsList" class="entity-list">
+                                        <div class="text-center">Loading...</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Models -->
+                            <div class="col-md-6 col-lg-4 mb-4">
+                                <div class="entity-card p-3">
+                                    <h5 class="mb-3">
+                                        <i class="bi bi-phone me-2"></i>Models
+                                        <button class="btn btn-sm btn-orange float-end"
+                                            onclick="showEntityModal('model')">+ Add</button>
+                                    </h5>
+                                    <div id="modelsList" class="entity-list">
+                                        <div class="text-center">Loading...</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Storage -->
+                            <div class="col-md-6 col-lg-4 mb-4">
+                                <div class="entity-card p-3">
+                                    <h5 class="mb-3">
+                                        <i class="bi bi-hdd me-2"></i>Storage
+                                        <button class="btn btn-sm btn-orange float-end"
+                                            onclick="showEntityModal('storage')">+ Add</button>
+                                    </h5>
+                                    <div id="storagesList" class="entity-list">
+                                        <div class="text-center">Loading...</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Quality -->
+                            <div class="col-md-6 col-lg-4 mb-4">
+                                <div class="entity-card p-3">
+                                    <h5 class="mb-3">
+                                        <i class="bi bi-star me-2"></i>Quality
+                                        <button class="btn btn-sm btn-orange float-end"
+                                            onclick="showEntityModal('quality')">+ Add</button>
+                                    </h5>
+                                    <div id="qualitysList" class="entity-list">
+                                        <div class="text-center">Loading...</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Cities -->
+                            <div class="col-md-6 col-lg-4 mb-4">
+                                <div class="entity-card p-3">
+                                    <h5 class="mb-3">
+                                        <i class="bi bi-geo-alt me-2"></i>Cities
+                                        <button class="btn btn-sm btn-orange float-end"
+                                            onclick="showEntityModal('city')">+ Add</button>
+                                    </h5>
+                                    <div id="citiesList" class="entity-list">
+                                        <div class="text-center">Loading...</div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <!-- Delivery Types -->
+                            <div class="col-md-6 col-lg-4 mb-4">
+                                <div class="entity-card p-3">
+                                    <h5 class="mb-3">
+                                        <i class="bi bi-truck me-2"></i>Delivery Types
+                                        <button class="btn btn-sm btn-orange float-end"
+                                            onclick="showEntityModal('deliverytype')">+ Add</button>
+                                    </h5>
+                                    <div id="deliverytypesList" class="entity-list">
+                                        <div class="text-center">Loading...</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Entity Add/Edit Modal -->
+                        <div class="modal fade" id="entityModal" tabindex="-1" aria-labelledby="entityModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="entityModalLabel">Add Entity</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form id="entityForm">
+                                            <div id="entityFormFields">
+                                                <!-- Fields will be dynamically generated -->
+                                            </div>
+                                            <button type="submit" class="btn btn-orange w-100">Save</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
+                    <!-- Reports Tab -->
+                    <div class="tab-pane fade" id="reports" role="tabpanel" aria-labelledby="reports-tab">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h3>Reports & Analytics</h3>
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-outline-secondary active"
+                                    onclick="loadReportSection('summary')">Summary</button>
+                                <button type="button" class="btn btn-outline-secondary"
+                                    onclick="loadReportSection('sales')">Sales</button>
+                                <button type="button" class="btn btn-outline-secondary"
+                                    onclick="loadReportSection('inventory')">Inventory</button>
+                                <button type="button" class="btn btn-outline-secondary"
+                                    onclick="loadReportSection('customers')">Customers</button>
+                                <button type="button" class="btn btn-outline-secondary"
+                                    onclick="loadReportSection('brands')">Brands</button>
+                            </div>
+                        </div>
+
+                        <div id="reportsContent">
+                            <!-- Report content will be loaded here -->
+                        </div>
+                    </div>
+
+                    <!-- Settings Tab -->
                     <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h3>Settings</h3>
@@ -387,15 +602,15 @@
                         <form id="admin-settings-form" class="w-50">
                             <div class="mb-3">
                                 <label for="adminName" class="form-label">Name</label>
-                                <input type="text" class="form-control" id="adminName" required>
+                                <input type="text" class="form-control" id="adminName" name="adminName" required>
                             </div>
                             <div class="mb-3">
                                 <label for="adminEmail" class="form-label">Email</label>
-                                <input type="email" class="form-control" id="adminEmail" required>
+                                <input type="email" class="form-control" id="adminEmail" name="adminEmail" required>
                             </div>
                             <div class="mb-3">
                                 <label for="adminPassword" class="form-label">Password</label>
-                                <input type="password" class="form-control" id="adminPassword">
+                                <input type="password" class="form-control" id="adminPassword" name="adminPassword">
                             </div>
                             <button type="submit" class="btn btn-orange w-100">Update</button>
                         </form>
