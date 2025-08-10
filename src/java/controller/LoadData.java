@@ -52,22 +52,22 @@ public class LoadData extends HttpServlet {
         //get-models
         Criteria c2 = s.createCriteria(Model.class);
         List<Model> modelList = c2.list();
-        //get-models-end
+ 
 
         //get-colors
         Criteria c3 = s.createCriteria(Color.class);
         List<Color> colorList = c3.list();
-        //get-colors-end
+    
 
         //get-storage
         Criteria c4 = s.createCriteria(Storage.class);
         List<Storage> storageList = c4.list();
-        //get-storage-end
+
 
         //get-quality
         Criteria c5 = s.createCriteria(Quality.class);
         List<Quality> qualityList = c5.list();
-        //get-quality-end
+  
 
         responseObject.add("brands", gson.toJsonTree(brandList));
         responseObject.add("colors", gson.toJsonTree(colorList));

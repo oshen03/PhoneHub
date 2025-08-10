@@ -32,7 +32,7 @@ async function verifyAccount() {
         } else {
 
             if (responseJSON.message === "1") {//Email not found
-                window.location = "sign-in.html";
+                window.location = "login-register.html";
 
             } else {
 

@@ -3,8 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/admin-login.html</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/Model.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/Status.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/images/menu/logo/1.png</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/AdminLogout.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/js/admin.js</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/Product.java</file>
@@ -13,20 +15,26 @@
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/model/SignInCheckFilter.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/model/PayHere.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/model/AdminFilter.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/index.html</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/CityData.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/SignOut.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/OrderStatus.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/js/verify-account.js</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/Storage.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/OrderItems.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/RemoveFromCart.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/Quality.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/my-account.html</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/LoadHomeData.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/DashboardServlet.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/VerifyPayments.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/js/index.js</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/User.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/js/sign-out.js</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/ReportServlet.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/MyAccount.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/Color.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/model/Mail.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/LoadCheckOutData.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/DeliveryTypes.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/Orders.java</file>
@@ -40,6 +48,7 @@
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/admin.html</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/AddToCart.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/LoadData.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/VerifyAccount.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/City.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/Brand.java</file>
         </group>

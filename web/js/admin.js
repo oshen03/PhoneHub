@@ -1,5 +1,3 @@
-// Enhanced Admin Panel JS - Complete with Entity Management & Reports
-
 document.addEventListener('DOMContentLoaded', adminOnloadFunctions);
 
 function adminOnloadFunctions() {
@@ -204,7 +202,7 @@ async function loadProducts() {
                             <td>P${product.id.toString().padStart(3, '0')}</td>
                             <td>${product.title}</td>
                             <td>${brandName}</td>
-                            <td>$${product.price}</td>
+                            <td>Lkr ${product.price}</td>
                             <td>${product.qty}</td>
                             <td>
                                 <button class="btn btn-sm btn-outline-primary me-1" onclick="editProduct(${product.id})">Edit</button>
@@ -261,7 +259,7 @@ async function handleProductFormSubmit(e) {
 }
 
 function editProduct(id) {
-    // TODO: Implement product editing functionality
+    
     console.log('Edit product:', id);
 }
 
@@ -965,7 +963,7 @@ async function loadInventoryReport() {
                                         <tr>
                                             <th>Product</th>
                                             <th>Brand</th>
-                                            <th>Stock</th>
+                                            <th>Qty</th>
                                             <th>Price</th>
                                         </tr>
                                     </thead>
@@ -1148,7 +1146,7 @@ async function loadBrandReport() {
                                     <th>Brand</th>
                                     <th>Products</th>
                                     <th>Avg Price</th>
-                                    <th>Total Stock</th>
+                                    <th>Total Qty</th>
                                     <th>Units Sold</th>
                                     <th>Revenue</th>
                                 </tr>

@@ -4,9 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import hibernate.*;
-import org.hibernate.Query;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -46,35 +48,40 @@ public class ReportServlet extends HttpServlet {
     }
 
     private void getSummaryReports(HttpServletResponse response) throws IOException {
-        Gson gson = new Gson();
         JsonObject responseObject = new JsonObject();
         responseObject.addProperty("status", false);
+        Gson gson = new Gson();
         
         SessionFactory sf = HibernateUtil.getSessionFactory();
-        Session session = sf.openSession();
+        Session s = sf.openSession();
         
         try {
             JsonObject salesSummary = new JsonObject();
             
-            // Total Sales Revenue
-            String revenueQuery = "SELECT SUM(oi.qty * p.price) FROM OrderItems oi JOIN oi.product p";
-            Query query = session.createQuery(revenueQuery);
-            Double totalSales = (Double) query.uniqueResult();
-            salesSummary.addProperty("totalSales", totalSales != null ? totalSales : 0.0);
+            // Get all orders
+            Criteria c1 = s.createCriteria(Orders.class);
+            List<Orders> ordersList = c1.list();
             
-            // Total Orders
-            String orderCountQuery = "SELECT COUNT(*) FROM Orders";
-            Long totalOrders = (Long) session.createQuery(orderCountQuery).uniqueResult();
-            salesSummary.addProperty("totalOrders", totalOrders != null ? totalOrders : 0);
+            // Get all users
+            Criteria c2 = s.createCriteria(User.class);
+            List<User> usersList = c2.list();
             
-            // Total Customers
-            String customerCountQuery = "SELECT COUNT(*) FROM User";
-            Long totalCustomers = (Long) session.createQuery(customerCountQuery).uniqueResult();
-            salesSummary.addProperty("totalCustomers", totalCustomers != null ? totalCustomers : 0);
+            // Get all order items
+            Criteria c3 = s.createCriteria(OrderItems.class);
+            List<OrderItems> orderItemsList = c3.list();
             
-            // Average Order Value
-            if (totalOrders > 0 && totalSales != null) {
-                double avgOrderValue = totalSales / totalOrders;
+            // Calculate totals
+            double totalSales = 0.0;
+            for (OrderItems item : orderItemsList) {
+                totalSales += item.getQty() * item.getProduct().getPrice();
+            }
+            
+            salesSummary.addProperty("totalSales", totalSales);
+            salesSummary.addProperty("totalOrders", ordersList.size());
+            salesSummary.addProperty("totalCustomers", usersList.size());
+            
+            if (ordersList.size() > 0) {
+                double avgOrderValue = totalSales / ordersList.size();
                 salesSummary.addProperty("avgOrderValue", avgOrderValue);
             } else {
                 salesSummary.addProperty("avgOrderValue", 0.0);
@@ -87,7 +94,7 @@ public class ReportServlet extends HttpServlet {
             responseObject.addProperty("message", "Error generating summary report: " + e.getMessage());
             e.printStackTrace();
         } finally {
-            session.close();
+            s.close();
         }
         
         response.setContentType("application/json");
@@ -95,57 +102,107 @@ public class ReportServlet extends HttpServlet {
     }
 
     private void getSalesReport(HttpServletResponse response) throws IOException {
-        Gson gson = new Gson();
         JsonObject responseObject = new JsonObject();
         responseObject.addProperty("status", false);
+        Gson gson = new Gson();
         
         SessionFactory sf = HibernateUtil.getSessionFactory();
-        Session session = sf.openSession();
+        Session s = sf.openSession();
         
         try {
-            JsonArray salesData = new JsonArray();
+            // Get all orders with order by date
+            Criteria c1 = s.createCriteria(Orders.class);
+            c1.addOrder(Order.desc("createdAt"));
+            List<Orders> ordersList = c1.list();
             
-            // Monthly Sales Report
-            String monthlySalesQuery = 
-                "SELECT MONTH(o.createdAt) as month, YEAR(o.createdAt) as year, " +
-                "COUNT(DISTINCT o.id) as orderCount, SUM(oi.qty * p.price) as revenue " +
-                "FROM Orders o, OrderItems oi JOIN oi.product p " +
-                "WHERE o.id = oi.orders.id " +
-                "GROUP BY YEAR(o.createdAt), MONTH(o.createdAt) " +
-                "ORDER BY YEAR(o.createdAt) DESC, MONTH(o.createdAt) DESC";
+            // Get all order items
+            Criteria c2 = s.createCriteria(OrderItems.class);
+            List<OrderItems> orderItemsList = c2.list();
             
-            List<Object[]> results = session.createQuery(monthlySalesQuery).list();
+            // Get all products
+            Criteria c3 = s.createCriteria(Product.class);
+            List<Product> productsList = c3.list();
             
-            for (Object[] row : results) {
-                JsonObject monthlyData = new JsonObject();
-                monthlyData.addProperty("month", (Integer) row[0]);
-                monthlyData.addProperty("year", (Integer) row[1]);
-                monthlyData.addProperty("orderCount", ((Long) row[2]).intValue());
-                monthlyData.addProperty("revenue", row[3] != null ? ((Double) row[3]) : 0.0);
-                salesData.add(monthlyData);
+            // Monthly sales data - group by month and year
+            JsonArray monthlySales = new JsonArray();
+            java.util.Map<String, Integer> monthlyOrderCount = new java.util.HashMap<>();
+            java.util.Map<String, Double> monthlyRevenue = new java.util.HashMap<>();
+            
+            // Process orders to group by month/year
+            for (Orders order : ordersList) {
+                if (order.getCreatedAt() != null) {
+                    java.util.Calendar cal = java.util.Calendar.getInstance();
+                    cal.setTime(order.getCreatedAt());
+                    int month = cal.get(java.util.Calendar.MONTH) + 1; // Calendar.MONTH is 0-based
+                    int year = cal.get(java.util.Calendar.YEAR);
+                    String key = year + "-" + month;
+                    
+                    // Count orders
+                    monthlyOrderCount.put(key, monthlyOrderCount.getOrDefault(key, 0) + 1);
+                    
+                    // Calculate revenue for this order
+                    double orderRevenue = 0.0;
+                    for (OrderItems item : orderItemsList) {
+                        if (item.getOrders().getId() == order.getId()) {
+                            orderRevenue += item.getQty() * item.getProduct().getPrice();
+                        }
+                    }
+                    monthlyRevenue.put(key, monthlyRevenue.getOrDefault(key, 0.0) + orderRevenue);
+                }
             }
             
-            responseObject.add("monthlySales", salesData);
+            // Convert to JSON format expected by frontend
+            for (String key : monthlyOrderCount.keySet()) {
+                String[] parts = key.split("-");
+                int year = Integer.parseInt(parts[0]);
+                int month = Integer.parseInt(parts[1]);
+                
+                JsonObject monthData = new JsonObject();
+                monthData.addProperty("month", month);
+                monthData.addProperty("year", year);
+                monthData.addProperty("orderCount", monthlyOrderCount.get(key));
+                monthData.addProperty("revenue", monthlyRevenue.get(key));
+                monthlySales.add(monthData);
+                
+                if (monthlySales.size() >= 12) break; // Limit to 12 months
+            }
             
-            // Top Selling Products
+            // Top products by quantity sold
             JsonArray topProducts = new JsonArray();
-            String topProductsQuery = 
-                "SELECT p.title, p.id, SUM(oi.qty) as totalSold, SUM(oi.qty * p.price) as revenue " +
-                "FROM OrderItems oi JOIN oi.product p " +
-                "GROUP BY p.id, p.title " +
-                "ORDER BY totalSold DESC";
+            java.util.List<JsonObject> productDataList = new java.util.ArrayList<>();
             
-            List<Object[]> topProductResults = session.createQuery(topProductsQuery).setMaxResults(10).list();
-            
-            for (Object[] row : topProductResults) {
-                JsonObject productData = new JsonObject();
-                productData.addProperty("title", (String) row[0]);
-                productData.addProperty("id", (Integer) row[1]);
-                productData.addProperty("totalSold", ((Long) row[2]).intValue());
-                productData.addProperty("revenue", row[3] != null ? ((Double) row[3]) : 0.0);
-                topProducts.add(productData);
+            for (Product product : productsList) {
+                int totalSold = 0;
+                double revenue = 0.0;
+                
+                for (OrderItems item : orderItemsList) {
+                    if (item.getProduct().getId() == product.getId()) {
+                        totalSold += item.getQty();
+                        revenue += item.getQty() * product.getPrice();
+                    }
+                }
+                
+                if (totalSold > 0) {
+                    JsonObject productData = new JsonObject();
+                    productData.addProperty("id", product.getId());
+                    productData.addProperty("title", product.getTitle());
+                    productData.addProperty("totalSold", totalSold);
+                    productData.addProperty("revenue", revenue);
+                    productDataList.add(productData);
+                }
             }
             
+            // Sort by totalSold descending and take top 10
+            productDataList.sort((a, b) -> Integer.compare(
+                b.get("totalSold").getAsInt(), 
+                a.get("totalSold").getAsInt()
+            ));
+            
+            for (int i = 0; i < Math.min(10, productDataList.size()); i++) {
+                topProducts.add(productDataList.get(i));
+            }
+            
+            responseObject.add("monthlySales", monthlySales);
             responseObject.add("topProducts", topProducts);
             responseObject.addProperty("status", true);
             
@@ -153,7 +210,7 @@ public class ReportServlet extends HttpServlet {
             responseObject.addProperty("message", "Error generating sales report: " + e.getMessage());
             e.printStackTrace();
         } finally {
-            session.close();
+            s.close();
         }
         
         response.setContentType("application/json");
@@ -161,55 +218,69 @@ public class ReportServlet extends HttpServlet {
     }
 
     private void getInventoryReport(HttpServletResponse response) throws IOException {
-        Gson gson = new Gson();
         JsonObject responseObject = new JsonObject();
         responseObject.addProperty("status", false);
+        Gson gson = new Gson();
         
         SessionFactory sf = HibernateUtil.getSessionFactory();
-        Session session = sf.openSession();
+        Session s = sf.openSession();
         
         try {
-            JsonArray inventoryData = new JsonArray();
+            // Get low stock products (qty <= 10)
+            Criteria c1 = s.createCriteria(Product.class);
+            c1.add(Restrictions.le("qty", 10));
+            c1.addOrder(Order.asc("qty"));
+            List<Product> lowStockProducts = c1.list();
             
-            // Low Stock Products
-            String lowStockQuery = 
-                "SELECT p.id, p.title, p.qty, p.price, b.name as brandName " +
-                "FROM Product p LEFT JOIN p.model m LEFT JOIN m.brand b " +
-                "WHERE p.qty <= 10 " +
-                "ORDER BY p.qty ASC";
-            
-            List<Object[]> lowStockResults = session.createQuery(lowStockQuery).list();
-            
-            for (Object[] row : lowStockResults) {
+            JsonArray lowStockData = new JsonArray();
+            for (Product product : lowStockProducts) {
                 JsonObject productData = new JsonObject();
-                productData.addProperty("id", (Integer) row[0]);
-                productData.addProperty("title", (String) row[1]);
-                productData.addProperty("qty", (Integer) row[2]);
-                productData.addProperty("price", (Double) row[3]);
-                productData.addProperty("brandName", row[4] != null ? (String) row[4] : "N/A");
-                inventoryData.add(productData);
+                productData.addProperty("id", product.getId());
+                productData.addProperty("title", product.getTitle());
+                productData.addProperty("qty", product.getQty());
+                productData.addProperty("price", product.getPrice());
+                
+                if (product.getModel() != null && product.getModel().getBrand() != null) {
+                    productData.addProperty("brandName", product.getModel().getBrand().getName());
+                } else {
+                    productData.addProperty("brandName", "N/A");
+                }
+                
+                lowStockData.add(productData);
             }
             
-            responseObject.add("lowStockProducts", inventoryData);
+            // Get all products for stock value by brand
+            Criteria c2 = s.createCriteria(Product.class);
+            List<Product> allProducts = c2.list();
             
-            // Stock Value by Brand
+            // Get all brands
+            Criteria c3 = s.createCriteria(Brand.class);
+            List<Brand> brandsList = c3.list();
+            
             JsonArray stockByBrand = new JsonArray();
-            String stockValueQuery = 
-                "SELECT b.name, COUNT(p.id) as productCount, SUM(p.qty * p.price) as stockValue " +
-                "FROM Product p LEFT JOIN p.model m LEFT JOIN m.brand b " +
-                "GROUP BY b.id, b.name " +
-                "ORDER BY stockValue DESC";
-            
-            List<Object[]> stockResults = session.createQuery(stockValueQuery).list();
-            
-            for (Object[] row : stockResults) {
-                JsonObject brandData = new JsonObject();
-                brandData.addProperty("brandName", row[0] != null ? (String) row[0] : "Unknown");
-                brandData.addProperty("productCount", ((Long) row[1]).intValue());
-                brandData.addProperty("stockValue", row[2] != null ? ((Double) row[2]) : 0.0);
-                stockByBrand.add(brandData);
+            for (Brand brand : brandsList) {
+                int productCount = 0;
+                double stockValue = 0.0;
+                
+                for (Product product : allProducts) {
+                    if (product.getModel() != null && 
+                        product.getModel().getBrand() != null && 
+                        product.getModel().getBrand().getId() == brand.getId()) {
+                        productCount++;
+                        stockValue += product.getQty() * product.getPrice();
+                    }
+                }
+                
+                if (productCount > 0) {
+                    JsonObject brandData = new JsonObject();
+                    brandData.addProperty("brandName", brand.getName());
+                    brandData.addProperty("productCount", productCount);
+                    brandData.addProperty("stockValue", stockValue);
+                    stockByBrand.add(brandData);
+                }
             }
             
+            responseObject.add("lowStockProducts", lowStockData);
             responseObject.add("stockByBrand", stockByBrand);
             responseObject.addProperty("status", true);
             
@@ -217,7 +288,7 @@ public class ReportServlet extends HttpServlet {
             responseObject.addProperty("message", "Error generating inventory report: " + e.getMessage());
             e.printStackTrace();
         } finally {
-            session.close();
+            s.close();
         }
         
         response.setContentType("application/json");
@@ -225,59 +296,107 @@ public class ReportServlet extends HttpServlet {
     }
 
     private void getCustomerReport(HttpServletResponse response) throws IOException {
-        Gson gson = new Gson();
         JsonObject responseObject = new JsonObject();
         responseObject.addProperty("status", false);
+        Gson gson = new Gson();
         
         SessionFactory sf = HibernateUtil.getSessionFactory();
-        Session session = sf.openSession();
+        Session s = sf.openSession();
         
         try {
-            JsonArray customerData = new JsonArray();
+            // Get all users
+            Criteria c1 = s.createCriteria(User.class);
+            c1.addOrder(Order.desc("created_at"));
+            List<User> usersList = c1.list();
             
-            // Top Customers by Order Count
-            String topCustomersQuery = 
-                "SELECT u.id, u.first_name, u.last_name, u.email, COUNT(o.id) as orderCount, " +
-                "SUM(oi.qty * p.price) as totalSpent " +
-                "FROM User u, Orders o, OrderItems oi LEFT JOIN oi.product p " +
-                "WHERE u.id = o.user.id AND o.id = oi.orders.id " +
-                "GROUP BY u.id, u.first_name, u.last_name, u.email " +
-                "HAVING COUNT(o.id) > 0 " +
-                "ORDER BY orderCount DESC";
+            // Get all orders
+            Criteria c2 = s.createCriteria(Orders.class);
+            List<Orders> ordersList = c2.list();
             
-            List<Object[]> customerResults = session.createQuery(topCustomersQuery).setMaxResults(20).list();
+            // Get all order items
+            Criteria c3 = s.createCriteria(OrderItems.class);
+            List<OrderItems> orderItemsList = c3.list();
             
-            for (Object[] row : customerResults) {
-                JsonObject customerObj = new JsonObject();
-                customerObj.addProperty("id", (Integer) row[0]);
-                customerObj.addProperty("firstName", (String) row[1]);
-                customerObj.addProperty("lastName", (String) row[2]);
-                customerObj.addProperty("email", (String) row[3]);
-                customerObj.addProperty("orderCount", ((Long) row[4]).intValue());
-                customerObj.addProperty("totalSpent", row[5] != null ? ((Double) row[5]) : 0.0);
-                customerData.add(customerObj);
+            // Calculate top customers
+            JsonArray topCustomers = new JsonArray();
+            java.util.List<JsonObject> customerDataList = new java.util.ArrayList<>();
+            
+            for (User user : usersList) {
+                int orderCount = 0;
+                double totalSpent = 0.0;
+                
+                // Count orders for this user
+                for (Orders order : ordersList) {
+                    if (order.getUser().getId() == user.getId()) {
+                        orderCount++;
+                        
+                        // Calculate total spent
+                        for (OrderItems item : orderItemsList) {
+                            if (item.getOrders().getId() == order.getId()) {
+                                totalSpent += item.getQty() * item.getProduct().getPrice();
+                            }
+                        }
+                    }
+                }
+                
+                if (orderCount > 0) {
+                    JsonObject customerData = new JsonObject();
+                    customerData.addProperty("id", user.getId());
+                    customerData.addProperty("firstName", user.getFirst_name());
+                    customerData.addProperty("lastName", user.getLast_name());
+                    customerData.addProperty("email", user.getEmail());
+                    customerData.addProperty("orderCount", orderCount);
+                    customerData.addProperty("totalSpent", totalSpent);
+                    customerDataList.add(customerData);
+                }
             }
             
-            responseObject.add("topCustomers", customerData);
+            // Sort customers by orderCount descending and take top 20
+            customerDataList.sort((a, b) -> Integer.compare(
+                b.get("orderCount").getAsInt(), 
+                a.get("orderCount").getAsInt()
+            ));
             
-            // Customer Registration Trends
+            for (int i = 0; i < Math.min(20, customerDataList.size()); i++) {
+                topCustomers.add(customerDataList.get(i));
+            }
+            
+            // Registration trends - group by month and year
             JsonArray registrationTrends = new JsonArray();
-            String registrationQuery = 
-                "SELECT MONTH(u.created_at) as month, YEAR(u.created_at) as year, COUNT(u.id) as newCustomers " +
-                "FROM User u " +
-                "GROUP BY YEAR(u.created_at), MONTH(u.created_at) " +
-                "ORDER BY YEAR(u.created_at) DESC, MONTH(u.created_at) DESC";
+            java.util.Map<String, Integer> monthlyRegistrations = new java.util.HashMap<>();
             
-            List<Object[]> registrationResults = session.createQuery(registrationQuery).setMaxResults(12).list();
-            
-            for (Object[] row : registrationResults) {
-                JsonObject trendData = new JsonObject();
-                trendData.addProperty("month", (Integer) row[0]);
-                trendData.addProperty("year", (Integer) row[1]);
-                trendData.addProperty("newCustomers", ((Long) row[2]).intValue());
-                registrationTrends.add(trendData);
+            // Process users to group by month/year
+            for (User user : usersList) {
+                if (user.getCreated_at() != null) {
+                    java.util.Calendar cal = java.util.Calendar.getInstance();
+                    cal.setTime(user.getCreated_at());
+                    int month = cal.get(java.util.Calendar.MONTH) + 1; // Calendar.MONTH is 0-based
+                    int year = cal.get(java.util.Calendar.YEAR);
+                    String key = year + "-" + month;
+                    
+                    monthlyRegistrations.put(key, monthlyRegistrations.getOrDefault(key, 0) + 1);
+                }
             }
             
+            // Convert to JSON format expected by frontend
+            java.util.List<String> sortedKeys = new java.util.ArrayList<>(monthlyRegistrations.keySet());
+            sortedKeys.sort(java.util.Collections.reverseOrder()); // Sort by year-month descending
+            
+            for (String key : sortedKeys) {
+                String[] parts = key.split("-");
+                int year = Integer.parseInt(parts[0]);
+                int month = Integer.parseInt(parts[1]);
+                
+                JsonObject trendData = new JsonObject();
+                trendData.addProperty("month", month);
+                trendData.addProperty("year", year);
+                trendData.addProperty("newCustomers", monthlyRegistrations.get(key));
+                registrationTrends.add(trendData);
+                
+                if (registrationTrends.size() >= 12) break; // Limit to 12 months
+            }
+            
+            responseObject.add("topCustomers", topCustomers);
             responseObject.add("registrationTrends", registrationTrends);
             responseObject.addProperty("status", true);
             
@@ -285,7 +404,7 @@ public class ReportServlet extends HttpServlet {
             responseObject.addProperty("message", "Error generating customer report: " + e.getMessage());
             e.printStackTrace();
         } finally {
-            session.close();
+            s.close();
         }
         
         response.setContentType("application/json");
@@ -293,46 +412,79 @@ public class ReportServlet extends HttpServlet {
     }
 
     private void getBrandReport(HttpServletResponse response) throws IOException {
-        Gson gson = new Gson();
         JsonObject responseObject = new JsonObject();
         responseObject.addProperty("status", false);
+        Gson gson = new Gson();
         
         SessionFactory sf = HibernateUtil.getSessionFactory();
-        Session session = sf.openSession();
+        Session s = sf.openSession();
         
         try {
-            JsonArray brandData = new JsonArray();
+            // Get all brands
+            Criteria c1 = s.createCriteria(Brand.class);
+            List<Brand> brandsList = c1.list();
             
-            // Brand Performance Report
-            String brandPerformanceQuery = 
-                "SELECT b.name, COUNT(p.id) as productCount, AVG(p.price) as avgPrice, " +
-                "SUM(p.qty) as totalStock, SUM(oi.qty) as totalSold, SUM(oi.qty * p.price) as revenue " +
-                "FROM Brand b, Model m, Product p, OrderItems oi " +
-                "WHERE b.id = m.brand.id AND m.id = p.model.id AND p.id = oi.product.id " +
-                "GROUP BY b.id, b.name " +
-                "ORDER BY revenue DESC";
+            // Get all models
+            Criteria c2 = s.createCriteria(Model.class);
+            List<Model> modelsList = c2.list();
             
-            List<Object[]> brandResults = session.createQuery(brandPerformanceQuery).list();
+            // Get all products
+            Criteria c3 = s.createCriteria(Product.class);
+            List<Product> productsList = c3.list();
             
-            for (Object[] row : brandResults) {
-                JsonObject brandObj = new JsonObject();
-                brandObj.addProperty("brandName", (String) row[0]);
-                brandObj.addProperty("productCount", ((Long) row[1]).intValue());
-                brandObj.addProperty("avgPrice", row[2] != null ? ((Double) row[2]) : 0.0);
-                brandObj.addProperty("totalStock", row[3] != null ? ((Long) row[3]).intValue() : 0);
-                brandObj.addProperty("totalSold", row[4] != null ? ((Long) row[4]).intValue() : 0);
-                brandObj.addProperty("revenue", row[5] != null ? ((Double) row[5]) : 0.0);
-                brandData.add(brandObj);
+            // Get all order items
+            Criteria c4 = s.createCriteria(OrderItems.class);
+            List<OrderItems> orderItemsList = c4.list();
+            
+            JsonArray brandPerformance = new JsonArray();
+            
+            for (Brand brand : brandsList) {
+                int productCount = 0;
+                double totalPrice = 0.0;
+                int totalStock = 0;
+                int totalSold = 0;
+                double revenue = 0.0;
+                
+                // Find products for this brand
+                for (Product product : productsList) {
+                    if (product.getModel() != null && 
+                        product.getModel().getBrand() != null && 
+                        product.getModel().getBrand().getId() == brand.getId()) {
+                        
+                        productCount++;
+                        totalPrice += product.getPrice();
+                        totalStock += product.getQty();
+                        
+                        // Calculate sold quantity and revenue
+                        for (OrderItems item : orderItemsList) {
+                            if (item.getProduct().getId() == product.getId()) {
+                                totalSold += item.getQty();
+                                revenue += item.getQty() * product.getPrice();
+                            }
+                        }
+                    }
+                }
+                
+                if (productCount > 0) {
+                    JsonObject brandData = new JsonObject();
+                    brandData.addProperty("brandName", brand.getName());
+                    brandData.addProperty("productCount", productCount);
+                    brandData.addProperty("avgPrice", totalPrice / productCount);
+                    brandData.addProperty("totalStock", totalStock);
+                    brandData.addProperty("totalSold", totalSold);
+                    brandData.addProperty("revenue", revenue);
+                    brandPerformance.add(brandData);
+                }
             }
             
-            responseObject.add("brandPerformance", brandData);
+            responseObject.add("brandPerformance", brandPerformance);
             responseObject.addProperty("status", true);
             
         } catch (Exception e) {
             responseObject.addProperty("message", "Error generating brand report: " + e.getMessage());
             e.printStackTrace();
         } finally {
-            session.close();
+            s.close();
         }
         
         response.setContentType("application/json");

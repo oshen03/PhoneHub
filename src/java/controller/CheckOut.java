@@ -226,7 +226,7 @@ public class CheckOut extends HttpServlet {
 
             payHereJson.addProperty("return_url", "");
             payHereJson.addProperty("cancel_url", "");
-            payHereJson.addProperty("notify_url", "https://55954bec92ee.ngrok-free.app/Smarttrade/VerifyPayments");
+            payHereJson.addProperty("notify_url", "https://90143f846acf.ngrok-free.app");
 
             payHereJson.addProperty("order_id", orderID);
             payHereJson.addProperty("items", items);

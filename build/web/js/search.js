@@ -1,4 +1,4 @@
-// Global state for filters
+
 let filters = {
     brand: [],
     color: [],
@@ -7,7 +7,7 @@ let filters = {
     priceRange: { min: 0, max: 1000000 }
 };
 
-// Function to show loading state
+
 function showLoading() {
     const gridContainer = document.getElementById('st-product-container');
     const listContainer = document.getElementById('st-product-container-list');
@@ -20,7 +20,6 @@ function showLoading() {
     if (listContainer) listContainer.innerHTML = loadingHtml;
 }
 
-// Initialize price range slider
 function initPriceRange() {
     const slider = $("#slider-range");
     if (slider.length) {
@@ -49,13 +48,13 @@ async function loadData() {
         const json = await response.json();
         console.log("LoadData response:", json); // Debug log
         
-        // Load filter options
+        // filter options
         if (json.brands) loadOptions("brand", json.brands, "name");
         if (json.qualities) loadOptions("quality", json.qualities, "value");
         if (json.colors) loadOptions("color", json.colors, "value");
         if (json.storages) loadOptions("storage", json.storages, "value");
         
-        // Initialize price range if not already done
+
         initPriceRange();
         
         // Perform initial search
@@ -71,7 +70,7 @@ function loadOptions(prefix, dataList, property) {
     let filterList = document.getElementById(`${prefix}-filter-list`);
     if (!filterList) return;
 
-    filterList.innerHTML = ""; // Clear existing options
+    filterList.innerHTML = ""; 
     
     dataList.forEach(item => {
         const li = document.createElement('li');
@@ -86,7 +85,7 @@ function loadOptions(prefix, dataList, property) {
         filterList.appendChild(li);
     });
 
-    // Add event listeners to checkboxes
+   
     const checkboxes = filterList.querySelectorAll('input[type="checkbox"]');
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function() {
@@ -113,13 +112,13 @@ async function searchProduct(firstResult) {
         const searchKey = document.getElementById('search-key')?.value || '';
         const sortBy = document.getElementById('st-sort')?.value || '';
         
-        // Build URL parameters
+ 
         const params = new URLSearchParams();
         params.append('searchKey', searchKey);
         params.append('firstResult', firstResult);
         params.append('sortBy', sortBy);
         
-        // Add filter parameters
+
         if (filters.brand.length > 0) {
             filters.brand.forEach(id => params.append('brand[]', id));
         }
@@ -137,13 +136,13 @@ async function searchProduct(firstResult) {
             params.append('priceRange[max]', filters.priceRange.max);
         }
 
-        console.log("Searching with params:", params.toString()); // Debug log
+        console.log("Searching with params:", params.toString()); 
 
         const response = await fetch(`SearchProducts?${params.toString()}`);
         if (!response.ok) throw new Error('Failed to search products');
         
         const json = await response.json();
-        console.log("Search response:", json); // Debug log
+        console.log("Search response:", json); 
         
         updateProductView(json);
         notif.success({ message: 'Products loaded successfully' });
@@ -154,7 +153,7 @@ async function searchProduct(firstResult) {
 }
 
 function updatePagination(totalProducts, currentFirst) {
-    const itemsPerPage = 9; // Same as your backend
+    const itemsPerPage = 9; 
     const totalPages = Math.ceil(totalProducts / itemsPerPage);
     const currentPage = Math.floor(currentFirst / itemsPerPage) + 1;
 
@@ -168,21 +167,21 @@ function updatePagination(totalProducts, currentFirst) {
     
     let linksHtml = '';
 
-    // Previous button
+  
     if (currentPage > 1) {
         linksHtml += `<li>
             <a class="Previous" href="#" onclick="searchProduct(${(currentPage - 2) * itemsPerPage}); return false;">Previous</a>
         </li>`;
     }
 
-    // Page numbers
+
     for (let i = 1; i <= totalPages; i++) {
         linksHtml += `<li class="${i === currentPage ? 'active' : ''}">
             <a href="#" onclick="searchProduct(${(i - 1) * itemsPerPage}); return false;">${i}</a>
         </li>`;
     }
 
-    // Next button
+
     if (currentPage < totalPages) {
         linksHtml += `<li>
             <a class="Next" href="#" onclick="searchProduct(${currentPage * itemsPerPage}); return false;">Next</a>
@@ -201,12 +200,12 @@ function clearAllFilters() {
         priceRange: { min: 0, max: 1000000 }
     };
 
-    // Uncheck all checkboxes
+
     document.querySelectorAll('.filter-checkbox').forEach(checkbox => {
         checkbox.checked = false;
     });
 
-    // Reset price range slider
+
     const slider = $("#slider-range");
     if (slider.length) {
         slider.slider("values", [0, 1000000]);
@@ -218,7 +217,7 @@ function clearAllFilters() {
 }
 
 function updateProductView(json) {
-    // Update product container for grid view
+  
     const gridContainer = document.getElementById('st-product-container');
     let gridHtml = '';
     
@@ -265,7 +264,7 @@ function updateProductView(json) {
         gridContainer.innerHTML = gridHtml;
     }
 
-    // Update product container for list view
+ 
     const listContainer = document.getElementById('st-product-container-list');
     let listHtml = '';
     
@@ -317,10 +316,10 @@ function updateProductView(json) {
         listContainer.innerHTML = listHtml;
     }
 
-    // Update pagination
+
     updatePagination(json.totalProducts || 0, json.firstResult || 0);
     
-    // Update toolbar amount
+
     const toolbarAmount = document.querySelector('.toolbar-amount span');
     if (toolbarAmount && json.totalProducts !== undefined) {
         const start = (json.firstResult || 0) + 1;
@@ -369,21 +368,19 @@ async function addToWishlist(productId) {
     }
 }
 
-// Add this function for backward compatibility
+
 function indexOnloadFunctions() {
-    // This function is called from the HTML body onload
-    // The main initialization is handled by DOMContentLoaded below
+
     console.log("indexOnloadFunctions called");
 }
 
-// Initialize everything on page load
 document.addEventListener('DOMContentLoaded', function() {
     console.log("DOM Content Loaded - Initializing search functionality");
     
-    // Load initial data and filters
+
     loadData();
     
-    // Handle sort change
+
     const sortSelect = document.getElementById('st-sort');
     if (sortSelect) {
         sortSelect.addEventListener('change', () => {
@@ -392,7 +389,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Handle search form submission
+
     const searchForm = document.querySelector('form.hm-searchbox');
     if (searchForm) {
         searchForm.addEventListener('submit', (e) => {
