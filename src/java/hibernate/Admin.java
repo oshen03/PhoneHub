@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "admin")  
+@Table(name = "admin")
 public class Admin implements Serializable {
 
     @Id
@@ -31,12 +31,14 @@ public class Admin implements Serializable {
     private String password;
 
     @Column(name = "created_at", nullable = false, columnDefinition = "DATETIME DEFAULT CURRENT_TIMESTAMP")
-    private Date created_at = new Date();  // Initialize with current date
+    private Date created_at = new Date();
+
+    @Column(name = "v_code", length = 6, nullable = true)
+    private Integer v_code;
 
     public Admin() {
     }
 
-    // Getters and setters remain the same
     public int getId() {
         return id;
     }
@@ -84,4 +86,13 @@ public class Admin implements Serializable {
     public void setCreated_at(Date created_at) {
         this.created_at = created_at;
     }
+
+    public Integer getV_code() {
+        return v_code;
+    }
+
+    public void setV_code(Integer v_code) {
+        this.v_code = v_code;
+    }
+
 }

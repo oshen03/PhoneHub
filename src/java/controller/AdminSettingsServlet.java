@@ -53,13 +53,13 @@ public class AdminSettingsServlet extends HttpServlet {
         SessionFactory sf = HibernateUtil.getSessionFactory();
         Session s = sf.openSession();
         try {
-            // For now, get admin with ID 1 (you can modify this to get from session)
+            
             Admin admin = (Admin) s.get(Admin.class, 1);
             if (admin != null) {
                 JsonObject adminObj = new JsonObject();
                 adminObj.addProperty("name", admin.getFirst_name() + " " + admin.getLast_name());
                 adminObj.addProperty("email", admin.getEmail());
-                // Don't return password for security
+                
                 responseObject.add("admin", adminObj);
                 responseObject.addProperty("status", true);
             } else {
@@ -88,7 +88,7 @@ public class AdminSettingsServlet extends HttpServlet {
             String email = input.get("email").getAsString();
             String password = input.has("password") ? input.get("password").getAsString() : null;
             
-            // For now, get admin with ID 1 (you can modify this to get from session)
+           
             Admin admin = (Admin) s.get(Admin.class, 1);
             if (admin != null) {
                 tx = s.beginTransaction();

@@ -4,50 +4,66 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/admin-login.html</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/css/notification.css</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/js/change-password.js</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/Model.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/Status.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/SaveProduct.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/change-password.html</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/Address.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/Cart.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/CheckOut.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/model/PayHere.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/index.html</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/OrderItems.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/RemoveFromCart.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/Quality.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/DashboardServlet.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/User.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/js/sign-out.js</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/ReportServlet.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/shop-list.html</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/HibernateUtil.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/model/Mail.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/DeliveryTypes.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/Admin.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/model/SessionFilter.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/LoadCartItems.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/LoadSingleProduct.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/SearchProducts.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/LoadData.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/SignUp.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/ChangePassword.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/images/menu/logo/1.png</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/AdminLogout.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/js/admin.js</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/Product.java</file>
-            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/Cart.java</file>
-            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/CheckOut.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/Error404Servlet.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/model/SignInCheckFilter.java</file>
-            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/model/PayHere.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/model/AdminFilter.java</file>
-            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/index.html</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/model/Util.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/CityData.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/js/notification.js</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/404.html</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/SignOut.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/OrderStatus.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/js/verify-account.js</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/Storage.java</file>
-            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/OrderItems.java</file>
-            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/RemoveFromCart.java</file>
-            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/Quality.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/WEB-INF/web.xml</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/my-account.html</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/LoadHomeData.java</file>
-            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/DashboardServlet.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/js/search.js</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/VerifyPayments.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/js/index.js</file>
-            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/User.java</file>
-            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/js/sign-out.js</file>
-            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/ReportServlet.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/MyAccount.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/Color.java</file>
-            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/model/Mail.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/LoadCheckOutData.java</file>
-            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/DeliveryTypes.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/Orders.java</file>
-            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/Admin.java</file>
-            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/model/SessionFilter.java</file>
-            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/LoadCartItems.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/LoadProdcutData.java</file>
-            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/LoadSingleProduct.java</file>
-            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/SearchProducts.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/CheckSessionCart.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/web/admin.html</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/AddToCart.java</file>
-            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/LoadData.java</file>
+            <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate.cfg.xml</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/controller/VerifyAccount.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/City.java</file>
             <file>file:/G:/PROJECTS/JIAT/WP%20II/PhoneHub/src/java/hibernate/Brand.java</file>

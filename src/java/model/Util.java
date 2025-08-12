@@ -2,7 +2,6 @@ package model;
 
 public class Util {
 
-
     public static String generateCode() {
         int random = (int) (Math.random() * 100000);
         return String.format("%06d", random);
@@ -17,7 +16,7 @@ public class Util {
     }
 
     public static boolean isCodeValid(String code) {
-        return code.matches("^\\d{4,5}$");
+        return code.matches("^\\d{4,6}$");
     }
 
     public static boolean isInteger(String value) {

@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 
 @WebServlet(name = "ReportServlet", urlPatterns = {"/ReportServlet"})
@@ -193,10 +194,15 @@ public class ReportServlet extends HttpServlet {
             }
             
             // Sort by totalSold descending and take top 10
-            productDataList.sort((a, b) -> Integer.compare(
-                b.get("totalSold").getAsInt(), 
-                a.get("totalSold").getAsInt()
-            ));
+            productDataList.sort(new Comparator<JsonObject>() {
+                @Override
+                public int compare(JsonObject a, JsonObject b) {
+                    return Integer.compare(
+                        b.get("totalSold").getAsInt(), 
+                        a.get("totalSold").getAsInt()
+                    );
+                }
+            });
             
             for (int i = 0; i < Math.min(10, productDataList.size()); i++) {
                 topProducts.add(productDataList.get(i));
@@ -352,10 +358,15 @@ public class ReportServlet extends HttpServlet {
             }
             
             // Sort customers by orderCount descending and take top 20
-            customerDataList.sort((a, b) -> Integer.compare(
-                b.get("orderCount").getAsInt(), 
-                a.get("orderCount").getAsInt()
-            ));
+            customerDataList.sort(new Comparator<JsonObject>() {
+                @Override
+                public int compare(JsonObject a, JsonObject b) {
+                    return Integer.compare(
+                        b.get("orderCount").getAsInt(), 
+                        a.get("orderCount").getAsInt()
+                    );
+                }
+            });
             
             for (int i = 0; i < Math.min(20, customerDataList.size()); i++) {
                 topCustomers.add(customerDataList.get(i));

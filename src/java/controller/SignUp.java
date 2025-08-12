@@ -25,7 +25,7 @@ public class SignUp extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        
+
         Gson gson = new Gson();
         JsonObject user = gson.fromJson(request.getReader(), JsonObject.class);
 
@@ -34,7 +34,7 @@ public class SignUp extends HttpServlet {
         final String email = user.get("email").getAsString();
         String password = user.get("password").getAsString();
         String confirmPassword = user.get("confirmPassword").getAsString();
-        
+
         // Validations
         JsonObject responseObject = new JsonObject();
         responseObject.addProperty("status", false);
@@ -87,7 +87,17 @@ public class SignUp extends HttpServlet {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            Mail.sendMail(email, "Smart Trade Verification", "<h1>" + verificationCode + "</h1>");
+                            Mail.sendMail(email, "PhoneHub Account Verification",
+                                    "<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;'>"
+                                    + "<h2 style='color: #FF6B00;'>Password Reset Request</h2>"
+                                    + "<p>You have requested to reset your password. Please use the verification code below:</p>"
+                                    + "<div style='background: #f5f5f5; padding: 20px; text-align: center; margin: 20px 0;'>"
+                                    + "<h1 style='color: #FF6B00; font-size: 36px; margin: 0;'>" + verificationCode + "</h1>"
+                                    + "</div>"
+                                    + "<p>This code will expire in 10 minutes for security purposes.</p>"
+                                    + "<p>If you didn't request this password reset, please ignore this email.</p>"
+                                    + "<p style='color: #666;'>Best regards,<br>PhoneHub Team</p>"
+                                    + "</div>");
                         }
                     }).start();
 
